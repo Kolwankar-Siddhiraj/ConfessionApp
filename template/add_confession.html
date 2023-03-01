@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Confession Form</title>
+</head>
+<body>
+
+    <form action="/confession/add" method="post">
+
+        {% csrf_token %}
+
+        <input type="text" placeholder="Confession to..."> <br> <br>
+        <textarea name="confession_note" id="confession_note" placeholder="Confession note" cols="30" rows="10"></textarea> <br> <br>
+        <textarea name="sender_info" id="sender_info" placeholder="Sender info" cols="30" rows="10"></textarea> <br> <br>
+        <input type="text" placeholder="Secret key"> <br> <br>
+
+        <input type="submit">
+    </form>
+
+</body>
+</html>
+
+
+
