@@ -1,6 +1,9 @@
 from django.http import HttpResponse
+from django.contrib.auth.models import User, auth
+
 from rest_framework.views import APIView
 from rest_framework.response import Response
+
 from .models import *
 from .serializer import *
 
@@ -11,7 +14,7 @@ class HandleConfession(APIView):
 
     def get(self, request):
 
-        confessions_objects = Confession.objects.filter().values("id", "confession_title", "confession_note", "sender_info", "state", "comment_allowed", "created_at", "updated_at")
+        confessions_objects = Confession.objects.filter(is_deleted=False, state="approved").values("id", "confession_title", "confession_note", "sender_info", "state", "comment_allowed", "created_at", "updated_at")
 
         return Response({"success": True, "error": False, "data": confessions_objects})
     
@@ -35,6 +38,28 @@ class HandleConfession(APIView):
     
     def delete(self, request):
 
-        return Response({"success": True, "error": False, "data":""})
+        rdata = request.data
+
+        Confession.objects.filter(id=rdata['id']).update(is_deleted=True)
+
+        return Response({"success": True, "error": False})
+
+
+
+class AdminLogin(APIView):
+
+    def post(self, request):
+
+        rdata = request.data
+
+        user = auth.authenticate(username=rdata['username'], password=rdata['password'])
+        if user is not None:
+            auth.login(request, user)
+        
+        else:
+            pass
+
+        return Response({"success": True, "error": False, "message": "Success!"})
+
 
 
